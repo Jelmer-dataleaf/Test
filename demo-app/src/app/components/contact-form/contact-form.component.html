@@ -1,0 +1,63 @@
+<div class="contact-form-page" data-testid="contact-form-page">
+  <h2>Contact Us</h2>
+
+  <div *ngIf="submitted" class="success-banner" data-testid="success-banner">
+    Message sent! We'll get back to you soon.
+    <button (click)="reset()" data-testid="reset-btn">Send another</button>
+  </div>
+
+  <form
+    *ngIf="!submitted"
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    novalidate
+    data-testid="contact-form"
+  >
+    <div class="field">
+      <label for="name">Name</label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Your name"
+        data-testid="input-name"
+      />
+      <span class="error" *ngIf="name.invalid && name.touched" data-testid="error-name">
+        <span *ngIf="name.errors?.['required']">Name is required.</span>
+        <span *ngIf="name.errors?.['minlength']">At least 2 characters.</span>
+      </span>
+    </div>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="you@example.com"
+        data-testid="input-email"
+      />
+      <span class="error" *ngIf="email.invalid && email.touched" data-testid="error-email">
+        <span *ngIf="email.errors?.['required']">Email is required.</span>
+        <span *ngIf="email.errors?.['email']">Enter a valid email address.</span>
+      </span>
+    </div>
+
+    <div class="field">
+      <label for="message">Message</label>
+      <textarea
+        id="message"
+        formControlName="message"
+        rows="4"
+        placeholder="Write your message…"
+        data-testid="input-message"
+      ></textarea>
+      <span class="error" *ngIf="message.invalid && message.touched" data-testid="error-message">
+        <span *ngIf="message.errors?.['required']">Message is required.</span>
+        <span *ngIf="message.errors?.['minlength']">At least 10 characters.</span>
+      </span>
+    </div>
+
+    <button type="submit" data-testid="submit-btn">Send</button>
+  </form>
+</div>
