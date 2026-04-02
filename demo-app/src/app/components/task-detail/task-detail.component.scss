@@ -1,0 +1,39 @@
+.task-detail {
+  max-width: 500px;
+  margin: 2rem auto;
+  font-family: sans-serif;
+
+  a { color: #1976d2; display: inline-block; margin-bottom: 1rem; }
+
+  h2 { margin-bottom: 1rem; }
+
+  dl {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1.5rem;
+
+    dt { font-weight: 600; color: #555; }
+  }
+
+  button {
+    padding: 0.5rem 1.25rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+
+    &.mark-complete { background: #43a047; color: #fff; }
+    &.mark-pending  { background: #fb8c00; color: #fff; }
+  }
+}
+
+.not-found {
+  max-width: 400px;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.priority-high   { color: #c62828; font-weight: 700; }
+.priority-medium { color: #e65100; font-weight: 700; }
+.priority-low    { color: #2e7d32; font-weight: 700; }

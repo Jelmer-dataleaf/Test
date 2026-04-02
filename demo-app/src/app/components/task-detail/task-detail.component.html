@@ -1,0 +1,34 @@
+@if (task) {
+  <section class="task-detail" data-testid="task-detail">
+    <a routerLink="/tasks" data-testid="back-link">← Back to list</a>
+
+    <h2 data-testid="detail-title">{{ task.title }}</h2>
+
+    <dl>
+      <dt>Status</dt>
+      <dd data-testid="detail-status">{{ task.completed ? 'Completed' : 'Pending' }}</dd>
+
+      <dt>Priority</dt>
+      <dd data-testid="detail-priority" class="priority-{{ task.priority }}">
+        {{ task.priority }}
+      </dd>
+
+      <dt>ID</dt>
+      <dd data-testid="detail-id">{{ task.id }}</dd>
+    </dl>
+
+    <button
+      data-testid="toggle-btn"
+      (click)="toggle()"
+      [class.mark-complete]="!task.completed"
+      [class.mark-pending]="task.completed"
+    >
+      {{ task.completed ? 'Mark as pending' : 'Mark as complete' }}
+    </button>
+  </section>
+} @else if (notFound) {
+  <section class="not-found" data-testid="not-found">
+    <p>Task not found.</p>
+    <a routerLink="/tasks">Go back</a>
+  </section>
+}

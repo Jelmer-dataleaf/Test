@@ -1,0 +1,54 @@
+<section class="task-list-page">
+  <h1 data-testid="page-heading">My Tasks</h1>
+
+  <!-- Add task form -->
+  <form class="add-form" (ngSubmit)="addTask()" data-testid="add-task-form">
+    <input
+      data-testid="task-title-input"
+      type="text"
+      placeholder="New task title…"
+      [(ngModel)]="newTitle"
+      name="title"
+      required
+    />
+    <select data-testid="priority-select" [(ngModel)]="newPriority" name="priority">
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+    <button data-testid="add-task-btn" type="submit">Add</button>
+  </form>
+
+  <!-- Task list -->
+  <ul class="task-list" data-testid="task-list">
+    @for (task of tasks; track trackById($index, task)) {
+      <li
+        class="task-item"
+        [class.completed]="task.completed"
+        [attr.data-testid]="'task-item-' + task.id"
+      >
+        <input
+          type="checkbox"
+          [checked]="task.completed"
+          (change)="toggle(task.id)"
+          [attr.data-testid]="'task-checkbox-' + task.id"
+        />
+        <span class="title" [attr.data-testid]="'task-title-' + task.id">
+          {{ task.title }}
+        </span>
+        <span class="badge priority-{{ task.priority }}" [attr.data-testid]="'task-priority-' + task.id">
+          {{ task.priority }}
+        </span>
+        <a [routerLink]="['/tasks', task.id]" data-testid="detail-link">Detail</a>
+        <button
+          class="delete-btn"
+          (click)="delete(task.id)"
+          [attr.data-testid]="'delete-btn-' + task.id"
+        >✕</button>
+      </li>
+    }
+    @empty {
+      <li data-testid="empty-state">No tasks yet. Add one above!</li>
+    }
+  </ul>
+</section>
