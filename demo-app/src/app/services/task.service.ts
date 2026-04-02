@@ -5,10 +5,10 @@ import { Task } from '../models/task.model';
 @Injectable({ providedIn: 'root' })
 export class TaskService {
   private tasks: Task[] = [
-    { id: 1, title: 'Set up Angular project', completed: true,  priority: 'high'   },
-    { id: 2, title: 'Write unit tests',        completed: false, priority: 'high'   },
-    { id: 3, title: 'Configure Playwright',    completed: false, priority: 'medium' },
-    { id: 4, title: 'Deploy to staging',       completed: false, priority: 'low'    },
+    { id: 1, title: 'Set up Angular project', completed: true, priority: 'high' },
+    { id: 2, title: 'Write unit tests', completed: false, priority: 'high' },
+    { id: 3, title: 'Configure Playwright', completed: false, priority: 'medium' },
+    { id: 4, title: 'Deploy to staging', completed: false, priority: 'low' },
   ];
 
   private readonly tasks$ = new BehaviorSubject<Task[]>(this.tasks);
@@ -34,9 +34,7 @@ export class TaskService {
   }
 
   toggleComplete(id: number): void {
-    this.tasks = this.tasks.map((t) =>
-      t.id === id ? { ...t, completed: !t.completed } : t
-    );
+    this.tasks = this.tasks.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t));
     this.tasks$.next(this.tasks);
   }
 

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule }      from '@angular/common';
-import { FormsModule }       from '@angular/forms';
-import { RouterModule }      from '@angular/router';
-import { Task }              from '../../models/task.model';
-import { TaskService }       from '../../services/task.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { Task } from '../../models/task.model';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-task-list',
@@ -14,7 +14,7 @@ import { TaskService }       from '../../services/task.service';
 })
 export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
-  newTitle   = '';
+  newTitle = '';
   newPriority: Task['priority'] = 'medium';
 
   constructor(private taskService: TaskService) {}

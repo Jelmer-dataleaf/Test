@@ -1,7 +1,15 @@
 /* Global reset */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-body { font-family: sans-serif; background: #f5f5f5; color: #212121; }
+body {
+  font-family: sans-serif;
+  background: #f5f5f5;
+  color: #212121;
+}
 
 /* App shell */
 .app-header {
@@ -12,7 +20,10 @@ body { font-family: sans-serif; background: #f5f5f5; color: #212121; }
   background: #1976d2;
   color: #fff;
 
-  .logo { font-weight: 700; font-size: 1.1rem; }
+  .logo {
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
 
   nav a {
     color: #fff;
@@ -20,8 +31,12 @@ body { font-family: sans-serif; background: #f5f5f5; color: #212121; }
     margin-left: 1.5rem;
     font-weight: 500;
 
-    &.active { text-decoration: underline; }
+    &.active {
+      text-decoration: underline;
+    }
   }
 }
 
-.app-content { padding: 1.5rem 2rem; }
+.app-content {
+  padding: 1.5rem 2rem;
+}

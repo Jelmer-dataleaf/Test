@@ -1,0 +1,31 @@
+<section class="task-search" data-testid="task-search">
+  <h2>Search Tasks</h2>
+
+  <div class="search-bar">
+    <input
+      data-testid="search-input"
+      type="text"
+      placeholder="Search by title…"
+      [(ngModel)]="query"
+      name="query"
+      (input)="search()"
+    />
+    <button data-testid="clear-btn" type="button" (click)="clearSearch()" [disabled]="!query">
+      Clear
+    </button>
+  </div>
+
+  <p data-testid="result-count">{{ filteredTasks.length }} result(s)</p>
+
+  <ul data-testid="search-results">
+    @for (task of filteredTasks; track task.id) {
+      <li [attr.data-testid]="'search-result-' + task.id" [class.completed]="task.completed">
+        <span class="badge priority-{{ task.priority }}">{{ task.priority }}</span>
+        {{ task.title }}
+      </li>
+    }
+    @empty {
+      <li data-testid="no-results">No tasks match your search.</li>
+    }
+  </ul>
+</section>

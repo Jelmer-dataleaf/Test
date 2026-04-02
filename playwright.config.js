@@ -16,7 +16,7 @@ module.exports = defineConfig({
 
   use: {
     // Base URL used by page.goto('/') calls — Angular dev server default
-    baseURL: process.env.BASE_URL || 'http://localhost:4200',
+    baseURL: process.env.BASE_URL || "http://localhost:4200",
 
     // Collect trace on first retry
     trace: "on-first-retry",

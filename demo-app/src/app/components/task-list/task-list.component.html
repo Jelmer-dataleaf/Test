@@ -36,7 +36,10 @@
         <span class="title" [attr.data-testid]="'task-title-' + task.id">
           {{ task.title }}
         </span>
-        <span class="badge priority-{{ task.priority }}" [attr.data-testid]="'task-priority-' + task.id">
+        <span
+          class="badge priority-{{ task.priority }}"
+          [attr.data-testid]="'task-priority-' + task.id"
+        >
           {{ task.priority }}
         </span>
         <a [routerLink]="['/tasks', task.id]" data-testid="detail-link">Detail</a>
@@ -44,10 +47,11 @@
           class="delete-btn"
           (click)="delete(task.id)"
           [attr.data-testid]="'delete-btn-' + task.id"
-        >✕</button>
+        >
+          ✕
+        </button>
       </li>
-    }
-    @empty {
+    } @empty {
       <li data-testid="empty-state">No tasks yet. Add one above!</li>
     }
   </ul>
