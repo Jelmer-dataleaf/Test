@@ -3,12 +3,13 @@
 const fs = require("fs");
 const path = require("path");
 
-// OpenAI is an optional dependency — only required when an API key is present.
-let OpenAI;
+// openai package exposes both OpenAI and AzureOpenAI clients.
+let OpenAI, AzureOpenAI;
 try {
-  OpenAI = require("openai");
+  ({ OpenAI, AzureOpenAI } = require("openai"));
 } catch {
   OpenAI = null;
+  AzureOpenAI = null;
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -29,9 +30,14 @@ const MAX_FILE_CHARS = 1500;
  * @returns {Promise<string>}  path of the written test file
  */
 async function generateTest(commitInfo, analysis) {
-  const testContent = process.env.OPENAI_API_KEY
-    ? await generateWithAI(commitInfo, analysis)
-    : generateFromTemplate(commitInfo, analysis);
+  const useAzure =
+    process.env.AZURE_OPENAI_API_KEY && process.env.AZURE_OPENAI_ENDPOINT;
+  const useOpenAI = process.env.OPENAI_API_KEY;
+
+  const testContent =
+    useAzure || useOpenAI
+      ? await generateWithAI(commitInfo, analysis)
+      : generateFromTemplate(commitInfo, analysis);
 
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
@@ -48,14 +54,28 @@ async function generateTest(commitInfo, analysis) {
 // ─── AI generation ────────────────────────────────────────────────────────────
 
 async function generateWithAI(commitInfo, analysis) {
-  if (!OpenAI) {
+  if (!OpenAI || !AzureOpenAI) {
     throw new Error(
       "openai package is not installed. Run `npm install` and try again.",
     );
   }
 
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  const model = process.env.OPENAI_MODEL || "gpt-4o";
+  let client;
+  let model;
+
+  if (process.env.AZURE_OPENAI_API_KEY && process.env.AZURE_OPENAI_ENDPOINT) {
+    // Azure OpenAI
+    client = new AzureOpenAI({
+      apiKey: process.env.AZURE_OPENAI_API_KEY,
+      endpoint: process.env.AZURE_OPENAI_ENDPOINT,
+      apiVersion: process.env.AZURE_OPENAI_API_VERSION || "2024-10-21",
+    });
+    model = process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-4o";
+  } else {
+    // Standard OpenAI
+    client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    model = process.env.OPENAI_MODEL || "gpt-4o";
+  }
 
   const response = await client.chat.completions.create({
     model,

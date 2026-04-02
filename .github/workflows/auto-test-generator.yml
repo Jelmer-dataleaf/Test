@@ -37,9 +37,16 @@ jobs:
       # ── 4. Run the test generator ────────────────────────────────────────────
       - name: Generate Playwright test
         env:
-          # Optional: set OPENAI_API_KEY in repo secrets for AI-powered generation
+          # ── Azure OpenAI (preferred) ──────────────────────────────────────────
+          # Set these in repo Secrets / Variables (never commit the key)
+          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          AZURE_OPENAI_ENDPOINT: ${{ vars.AZURE_OPENAI_ENDPOINT || 'https://dataleaf-openai-intern.openai.azure.com/' }}
+          AZURE_OPENAI_DEPLOYMENT: ${{ vars.AZURE_OPENAI_DEPLOYMENT || 'gpt-5.4' }}
+          AZURE_OPENAI_API_VERSION: ${{ vars.AZURE_OPENAI_API_VERSION || '2024-10-21' }}
+          # ── Standard OpenAI fallback ─────────────────────────────────────────
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4o' }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.4' }}
+          # ── App ──────────────────────────────────────────────────────────────
           BASE_URL: ${{ vars.BASE_URL || 'http://localhost:4200' }}
         run: node src/index.js
 

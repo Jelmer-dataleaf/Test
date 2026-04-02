@@ -63,7 +63,12 @@ async function main() {
   );
 
   // ── Step 3: Generate Playwright test ──────────────────────────────────────
-  const mode = process.env.OPENAI_API_KEY ? "AI (OpenAI)" : "template-based";
+  const mode =
+    process.env.AZURE_OPENAI_API_KEY && process.env.AZURE_OPENAI_ENDPOINT
+      ? "AI (Azure OpenAI)"
+      : process.env.OPENAI_API_KEY
+        ? "AI (OpenAI)"
+        : "template-based";
   log(3, `Generating Playwright test using ${mode} strategy…`);
 
   let testPath;
