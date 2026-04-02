@@ -10,12 +10,15 @@ import { test, expect } from "@playwright/test";
 test.describe("Form — /feedback", () => {
   test("renders the form", async ({ page }) => {
     await page.goto("/feedback");
+    await page.waitForTimeout(500);
     await expect(page.getByTestId("feedback-form")).toBeVisible();
   });
 
   test("shows validation errors when submitted empty", async ({ page }) => {
     await page.goto("/feedback");
+    await page.waitForTimeout(500);
     await page.getByTestId("submit-btn").click();
+    await page.waitForTimeout(500);
     await expect(page.getByTestId("error-fullName")).toBeVisible();
     await expect(page.getByTestId("error-email")).toBeVisible();
     await expect(page.getByTestId("error-category")).toBeVisible();
@@ -26,15 +29,22 @@ test.describe("Form — /feedback", () => {
 
   test("submits successfully with valid data", async ({ page }) => {
     await page.goto("/feedback");
+    await page.waitForTimeout(500);
     await page.getByTestId("input-fullName").fill("Jane Doe");
+    await page.waitForTimeout(500);
     await page.getByTestId("input-email").fill("test@example.com");
+    await page.waitForTimeout(500);
     await page.getByTestId("input-category").selectOption("General Feedback");
+    await page.waitForTimeout(500);
     await page.getByTestId("input-rating").fill("4");
+    await page.waitForTimeout(500);
     await page.getByTestId("input-subject").fill("Great product overall");
+    await page.waitForTimeout(500);
     await page
       .getByTestId("input-feedback")
       .fill("This is a detailed feedback message that is long enough.");
     await page.getByTestId("submit-btn").click();
+    await page.waitForTimeout(500);
     await expect(page.getByTestId("success-banner")).toBeVisible();
   });
 });
@@ -43,12 +53,14 @@ test.describe("Logic changes — demo-app/src/app/app.html, demo-app/src/app/app
   test("new function produces the expected result", async ({ page }) => {
     // TODO: navigate to the page that exercises the new function
     await page.goto("/");
+    await page.waitForTimeout(500);
     // TODO: trigger the code path and assert the visible outcome
     await expect(page).toHaveTitle(/.+/);
   });
 
   test("new function handles edge cases gracefully", async ({ page }) => {
     await page.goto("/");
+    await page.waitForTimeout(500);
     // TODO: simulate an edge-case input and assert no crash / correct output
   });
 });

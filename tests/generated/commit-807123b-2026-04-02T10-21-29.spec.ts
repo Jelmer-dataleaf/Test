@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Dashboard routing and navigation', () => {
   test('redirects root path to dashboard and renders dashboard content', async ({ page }) => {
     await page.goto('/');
+    await page.waitForTimeout(500);
 
     await expect(page).toHaveURL(/\/dashboard$/);
     await expect(page.getByTestId('app-header')).toBeVisible();
@@ -14,9 +15,11 @@ test.describe('Dashboard routing and navigation', () => {
 
   test('shows dashboard nav link and allows navigation to dashboard from another page', async ({ page }) => {
     await page.goto('/tasks');
+    await page.waitForTimeout(500);
 
     await expect(page.getByTestId('nav-dashboard')).toBeVisible();
     await page.getByTestId('nav-dashboard').click();
+    await page.waitForTimeout(500);
 
     await expect(page).toHaveURL(/\/dashboard$/);
     await expect(page.getByTestId('dashboard-page')).toBeVisible();
@@ -24,11 +27,13 @@ test.describe('Dashboard routing and navigation', () => {
 
   test('dashboard nav link is active on dashboard route and not active on tasks route', async ({ page }) => {
     await page.goto('/dashboard');
+    await page.waitForTimeout(500);
 
     await expect(page.getByTestId('nav-dashboard')).toHaveClass(/active/);
     await expect(page.getByTestId('nav-tasks')).not.toHaveClass(/active/);
 
     await page.getByTestId('nav-tasks').click();
+    await page.waitForTimeout(500);
 
     await expect(page).toHaveURL(/\/tasks$/);
     await expect(page.getByTestId('nav-dashboard')).not.toHaveClass(/active/);
@@ -39,6 +44,7 @@ test.describe('Dashboard routing and navigation', () => {
 test.describe('Dashboard page content', () => {
   test('renders all stat cards with expected values, units, and labels', async ({ page }) => {
     await page.goto('/dashboard');
+    await page.waitForTimeout(500);
 
     await expect(page.getByTestId('stats-grid')).toBeVisible();
 
@@ -62,6 +68,7 @@ test.describe('Dashboard page content', () => {
 
   test('renders quick action links with expected labels', async ({ page }) => {
     await page.goto('/dashboard');
+    await page.waitForTimeout(500);
 
     await expect(page.getByTestId('quick-links')).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Quick actions' })).toBeVisible();
@@ -74,6 +81,7 @@ test.describe('Dashboard page content', () => {
 
   test('does not render unexpected extra stat cards or quick links', async ({ page }) => {
     await page.goto('/dashboard');
+    await page.waitForTimeout(500);
 
     await expect(page.locator('[data-testid^="stat-"]')).toHaveCount(4);
     await expect(page.locator('[data-testid^="link-"]')).toHaveCount(4);
@@ -85,6 +93,7 @@ test.describe('Dashboard page content', () => {
 test.describe('Dashboard link behavior', () => {
   test('stat cards navigate to their target routes', async ({ page }) => {
     await page.goto('/dashboard');
+    await page.waitForTimeout(500);
 
     const routes = [
       { testId: 'stat-tasks', url: /\/tasks$/ },
@@ -95,13 +104,16 @@ test.describe('Dashboard link behavior', () => {
 
     for (const route of routes) {
       await page.goto('/dashboard');
+      await page.waitForTimeout(500);
       await page.getByTestId(route.testId).click();
+      await page.waitForTimeout(500);
       await expect(page).toHaveURL(route.url);
     }
   });
 
   test('quick action links navigate to their target routes', async ({ page }) => {
     await page.goto('/dashboard');
+    await page.waitForTimeout(500);
 
     const routes = [
       { testId: 'link-contact', url: /\/contact$/ },
@@ -112,22 +124,27 @@ test.describe('Dashboard link behavior', () => {
 
     for (const route of routes) {
       await page.goto('/dashboard');
+      await page.waitForTimeout(500);
       await page.getByTestId(route.testId).click();
+      await page.waitForTimeout(500);
       await expect(page).toHaveURL(route.url);
     }
   });
 
   test('dashboard page remains usable after direct navigation to dashboard route', async ({ page }) => {
     await page.goto('/dashboard');
+    await page.waitForTimeout(500);
 
     await expect(page.getByTestId('dashboard-page')).toBeVisible();
     await expect(page.getByTestId('stats-grid')).toBeVisible();
     await expect(page.getByTestId('quick-links')).toBeVisible();
 
     await page.getByTestId('stat-tasks').click();
+    await page.waitForTimeout(500);
     await expect(page).toHaveURL(/\/tasks$/);
 
     await page.getByTestId('nav-dashboard').click();
+    await page.waitForTimeout(500);
     await expect(page).toHaveURL(/\/dashboard$/);
     await expect(page.getByTestId('dashboard-page')).toBeVisible();
   });

@@ -3,6 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("App header navigation", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
+    await page.waitForTimeout(500);
   });
 
   test("renders the app header, logo, and all navigation links including newsletter", async ({
@@ -42,6 +43,7 @@ test.describe("App header navigation", () => {
     page,
   }) => {
     await page.getByTestId("nav-newsletter").click();
+    await page.waitForTimeout(500);
     await expect(page).toHaveURL(/\/newsletter$/);
   });
 

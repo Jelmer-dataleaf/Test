@@ -11,12 +11,14 @@ test.describe('Logic changes — .gitignore, tests/generated/commit-7a215e1-2026
   test('new function produces the expected result', async ({ page }) => {
     // TODO: navigate to the page that exercises the new function
     await page.goto('/');
+    await page.waitForTimeout(500);
     // TODO: trigger the code path and assert the visible outcome
     await expect(page).toHaveTitle(/.+/);
   });
 
   test('new function handles edge cases gracefully', async ({ page }) => {
     await page.goto('/');
+    await page.waitForTimeout(500);
     // TODO: simulate an edge-case input and assert no crash / correct output
   });
 });

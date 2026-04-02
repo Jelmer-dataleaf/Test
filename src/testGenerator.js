@@ -89,6 +89,7 @@ async function generateWithAI(commitInfo, analysis) {
           "Use @playwright/test. Add a brief inline comment per test block.",
           "Include happy-path, edge-case, and error-state tests where applicable.",
           "Prefer data-testid selectors; fall back to ARIA roles.",
+          "After every user interaction (page.goto, .click(), .fill(), .check(), .selectOption(), .type()), add 'await page.waitForTimeout(500);' on the next line so testers can visually follow the test execution.",
         ].join("\n"),
       },
       {

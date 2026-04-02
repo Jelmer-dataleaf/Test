@@ -3,6 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Login form", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/login");
+    await page.waitForTimeout(500);
   });
 
   test("renders login route from navigation and shows form fields", async ({
@@ -10,7 +11,9 @@ test.describe("Login form", () => {
   }) => {
     // Happy path: navigation exposes the new login page and core form UI
     await page.goto("/");
+    await page.waitForTimeout(500);
     await page.getByTestId("nav-login").click();
+    await page.waitForTimeout(500);
 
     await expect(page).toHaveURL(/\/login$/);
     await expect(page.getByTestId("login-page")).toBeVisible();
@@ -28,6 +31,7 @@ test.describe("Login form", () => {
   }) => {
     // Error state: required validation appears after invalid submit
     await page.getByTestId("submit-btn").click();
+    await page.waitForTimeout(500);
 
     await expect(page.getByTestId("error-username")).toBeVisible();
     await expect(page.getByTestId("error-username")).toContainText(
@@ -46,8 +50,11 @@ test.describe("Login form", () => {
   }) => {
     // Edge case: minlength messages are shown for too-short credentials
     await page.getByTestId("input-username").fill("ab");
+    await page.waitForTimeout(500);
     await page.getByTestId("input-password").fill("12345");
+    await page.waitForTimeout(500);
     await page.getByTestId("submit-btn").click();
+    await page.waitForTimeout(500);
 
     await expect(page.getByTestId("error-username")).toBeVisible();
     await expect(page.getByTestId("error-username")).toContainText(
@@ -69,10 +76,12 @@ test.describe("Login form", () => {
     await expect(toggleButton).toHaveText("Show");
 
     await toggleButton.click();
+    await page.waitForTimeout(500);
     await expect(passwordInput).toHaveAttribute("type", "text");
     await expect(toggleButton).toHaveText("Hide");
 
     await toggleButton.click();
+    await page.waitForTimeout(500);
     await expect(passwordInput).toHaveAttribute("type", "password");
     await expect(toggleButton).toHaveText("Show");
   });
@@ -82,9 +91,13 @@ test.describe("Login form", () => {
   }) => {
     // Happy path: valid form submission shows success state and hides form
     await page.getByTestId("input-username").fill("validuser");
+    await page.waitForTimeout(500);
     await page.getByTestId("input-password").fill("secret1");
+    await page.waitForTimeout(500);
     await page.getByTestId("input-remember-me").check();
+    await page.waitForTimeout(500);
     await page.getByTestId("submit-btn").click();
+    await page.waitForTimeout(500);
 
     await expect(page.getByTestId("success-banner")).toBeVisible();
     await expect(page.getByTestId("success-banner")).toContainText(
@@ -99,13 +112,18 @@ test.describe("Login form", () => {
   }) => {
     // Happy path: reset returns from success banner to clean login form
     await page.getByTestId("input-username").fill("validuser");
+    await page.waitForTimeout(500);
     await page.getByTestId("input-password").fill("secret1");
+    await page.waitForTimeout(500);
     await page.getByTestId("toggle-password").click();
+    await page.waitForTimeout(500);
     await page.getByTestId("submit-btn").click();
+    await page.waitForTimeout(500);
 
     await expect(page.getByTestId("success-banner")).toBeVisible();
 
     await page.getByTestId("reset-btn").click();
+    await page.waitForTimeout(500);
 
     await expect(page.getByTestId("login-form")).toBeVisible();
     await expect(page.getByTestId("success-banner")).toHaveCount(0);
@@ -122,6 +140,7 @@ test.describe("Login form", () => {
   test("allows direct routing to /login", async ({ page }) => {
     // Happy path: route is registered and accessible directly
     await page.goto("/login");
+    await page.waitForTimeout(500);
 
     await expect(page).toHaveURL(/\/login$/);
     await expect(page.getByTestId("login-page")).toBeVisible();
