@@ -1,0 +1,19 @@
+<div class="meme-page" data-testid="meme-page">
+  <h2>Random Meme</h2>
+
+  <div *ngIf="loading" class="state-msg" data-testid="meme-loading">Loading a banger...</div>
+
+  <div *ngIf="error" class="state-msg error" data-testid="meme-error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="meme" class="meme-card" data-testid="meme-card">
+    <p class="meme-title" data-testid="meme-title">{{ meme.title }}</p>
+    <img [src]="meme.url" [alt]="meme.title" class="meme-img" data-testid="meme-img" />
+    <p class="meme-meta">r/{{ meme.subreddit }} &mdash; by u/{{ meme.author }}</p>
+  </div>
+
+  <button (click)="fetchMeme()" [disabled]="loading" class="next-btn" data-testid="next-btn">
+    {{ loading ? 'Loading...' : 'Next Meme' }}
+  </button>
+</div>
