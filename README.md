@@ -60,17 +60,17 @@ Generated files land in `tests/generated/` named `commit-<hash>-<timestamp>.spec
 
 The Angular demo app (served on `http://localhost:4200`) contains these routes:
 
-| Route          | Description                                      |
-| -------------- | ------------------------------------------------ |
-| `/tasks`       | Task list with add/complete/delete               |
-| `/tasks/:id`   | Task detail view                                 |
-| `/search`      | Search tasks by keyword                          |
-| `/contact`     | Contact form (name, email, message)              |
-| `/register`    | Registration form with password match validation |
-| `/feedback`    | Feedback form with category, rating, character counter |
-| `/newsletter`  | Newsletter subscription (email + first name)     |
-| `/login`       | Login form with show/hide password toggle        |
-| `/meme`        | Random meme page (fetches from meme-api.com)     |
+| Route         | Description                                            |
+| ------------- | ------------------------------------------------------ |
+| `/tasks`      | Task list with add/complete/delete                     |
+| `/tasks/:id`  | Task detail view                                       |
+| `/search`     | Search tasks by keyword                                |
+| `/contact`    | Contact form (name, email, message)                    |
+| `/register`   | Registration form with password match validation       |
+| `/feedback`   | Feedback form with category, rating, character counter |
+| `/newsletter` | Newsletter subscription (email + first name)           |
+| `/login`      | Login form with show/hide password toggle              |
+| `/meme`       | Random meme page (fetches from meme-api.com)           |
 
 ---
 
@@ -146,18 +146,18 @@ The workflow (`.github/workflows/auto-test-generator.yml`) runs on every push.
 
 Add these to your repository **Secrets** (Settings → Secrets and variables → Actions):
 
-| Secret                  | Description                      |
-| ----------------------- | -------------------------------- |
-| `AZURE_OPENAI_API_KEY`  | Your Azure OpenAI API key        |
+| Secret                 | Description               |
+| ---------------------- | ------------------------- |
+| `AZURE_OPENAI_API_KEY` | Your Azure OpenAI API key |
 
 Add these as **Variables** (same page → Variables tab):
 
-| Variable                   | Default                                              |
-| -------------------------- | ---------------------------------------------------- |
-| `AZURE_OPENAI_ENDPOINT`    | `https://dataleaf-openai-intern.openai.azure.com/`   |
-| `AZURE_OPENAI_DEPLOYMENT`  | `gpt-5.4`                                            |
-| `AZURE_OPENAI_API_VERSION` | `2024-10-21`                                         |
-| `BASE_URL`                 | `http://localhost:4200`                              |
+| Variable                   | Default                                            |
+| -------------------------- | -------------------------------------------------- |
+| `AZURE_OPENAI_ENDPOINT`    | `https://dataleaf-openai-intern.openai.azure.com/` |
+| `AZURE_OPENAI_DEPLOYMENT`  | `gpt-5.4`                                          |
+| `AZURE_OPENAI_API_VERSION` | `2024-10-21`                                       |
+| `BASE_URL`                 | `http://localhost:4200`                            |
 
 > **Never commit API keys.** The `.env` file is in `.gitignore`.
 
@@ -167,13 +167,13 @@ Add these as **Variables** (same page → Variables tab):
 
 When no AI key is configured the generator inspects the changed files and produces targeted tests automatically:
 
-| Detected pattern      | Generated tests                                                  |
-| --------------------- | ---------------------------------------------------------------- |
-| Angular/React form    | Renders form · empty-submit errors · per-field required checks · successful submit |
-| Angular component     | Renders without errors · responds to interaction                 |
-| API routes            | GET 200 · POST invalid data 4xx                                  |
-| Page routes           | Loads page · displays heading                                    |
-| Functions / exports   | Expected result · edge case                                      |
+| Detected pattern    | Generated tests                                                                    |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| Angular/React form  | Renders form · empty-submit errors · per-field required checks · successful submit |
+| Angular component   | Renders without errors · responds to interaction                                   |
+| API routes          | GET 200 · POST invalid data 4xx                                                    |
+| Page routes         | Loads page · displays heading                                                      |
+| Functions / exports | Expected result · edge case                                                        |
 
 Form detection reads `data-testid` attributes directly from the HTML template so selectors are always accurate.
 
@@ -181,8 +181,8 @@ Form detection reads `data-testid` attributes directly from the HTML template so
 
 ## Scripts
 
-| Command                    | Description                                  |
-| -------------------------- | -------------------------------------------- |
-| `npm run generate`         | Generate a test from the last git commit     |
-| `npm test`                 | Run all Playwright tests (all browsers)      |
-| `npm run test:generated`   | Run only the auto-generated specs            |
+| Command                  | Description                              |
+| ------------------------ | ---------------------------------------- |
+| `npm run generate`       | Generate a test from the last git commit |
+| `npm test`               | Run all Playwright tests (all browsers)  |
+| `npm run test:generated` | Run only the auto-generated specs        |
