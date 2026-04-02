@@ -1,0 +1,118 @@
+<div class="feedback-page" data-testid="feedback-page">
+  <h2>Send Feedback</h2>
+
+  <div *ngIf="submitted" class="success-banner" data-testid="success-banner">
+    Thanks for your feedback! We really appreciate it.
+    <button (click)="reset()" data-testid="reset-btn">Send more</button>
+  </div>
+
+  <form
+    *ngIf="!submitted"
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    novalidate
+    data-testid="feedback-form"
+  >
+    <!-- Full Name -->
+    <div class="field">
+      <label for="fullName">Full Name</label>
+      <input
+        id="fullName"
+        type="text"
+        formControlName="fullName"
+        placeholder="Jane Doe"
+        data-testid="input-fullName"
+      />
+      <span class="error" *ngIf="fullName.invalid && fullName.touched" data-testid="error-fullName">
+        <span *ngIf="fullName.errors?.['required']">Full name is required.</span>
+        <span *ngIf="fullName.errors?.['minlength']">At least 2 characters.</span>
+      </span>
+    </div>
+
+    <!-- Email -->
+    <div class="field">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="you@example.com"
+        data-testid="input-email"
+      />
+      <span class="error" *ngIf="email.invalid && email.touched" data-testid="error-email">
+        <span *ngIf="email.errors?.['required']">Email is required.</span>
+        <span *ngIf="email.errors?.['email']">Enter a valid email address.</span>
+      </span>
+    </div>
+
+    <!-- Category -->
+    <div class="field">
+      <label for="category">Category</label>
+      <select id="category" formControlName="category" data-testid="input-category">
+        <option value="" disabled>Select a category</option>
+        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      </select>
+      <span class="error" *ngIf="category.invalid && category.touched" data-testid="error-category">
+        Please select a category.
+      </span>
+    </div>
+
+    <!-- Rating -->
+    <div class="field">
+      <label for="rating">Rating (1 – 5)</label>
+      <input
+        id="rating"
+        type="number"
+        formControlName="rating"
+        min="1"
+        max="5"
+        placeholder="3"
+        data-testid="input-rating"
+      />
+      <span class="error" *ngIf="rating.invalid && rating.touched" data-testid="error-rating">
+        <span *ngIf="rating.errors?.['required']">Rating is required.</span>
+        <span *ngIf="rating.errors?.['min'] || rating.errors?.['max']"
+          >Must be between 1 and 5.</span
+        >
+      </span>
+    </div>
+
+    <!-- Subject -->
+    <div class="field">
+      <label for="subject">Subject</label>
+      <input
+        id="subject"
+        type="text"
+        formControlName="subject"
+        placeholder="Brief summary (5–80 chars)"
+        data-testid="input-subject"
+      />
+      <span class="error" *ngIf="subject.invalid && subject.touched" data-testid="error-subject">
+        <span *ngIf="subject.errors?.['required']">Subject is required.</span>
+        <span *ngIf="subject.errors?.['minlength']">At least 5 characters.</span>
+        <span *ngIf="subject.errors?.['maxlength']">Max 80 characters.</span>
+      </span>
+    </div>
+
+    <!-- Feedback -->
+    <div class="field">
+      <label for="feedback"
+        >Feedback <span class="char-count">({{ feedbackLength }}/500)</span></label
+      >
+      <textarea
+        id="feedback"
+        formControlName="feedback"
+        rows="5"
+        placeholder="Tell us what you think… (20–500 chars)"
+        data-testid="input-feedback"
+      ></textarea>
+      <span class="error" *ngIf="feedback.invalid && feedback.touched" data-testid="error-feedback">
+        <span *ngIf="feedback.errors?.['required']">Feedback is required.</span>
+        <span *ngIf="feedback.errors?.['minlength']">At least 20 characters.</span>
+        <span *ngIf="feedback.errors?.['maxlength']">Max 500 characters.</span>
+      </span>
+    </div>
+
+    <button type="submit" data-testid="submit-btn">Submit Feedback</button>
+  </form>
+</div>
