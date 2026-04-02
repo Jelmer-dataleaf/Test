@@ -1,0 +1,67 @@
+<div class="login-page" data-testid="login-page">
+  <h2>Sign In</h2>
+
+  <div *ngIf="submitted" class="success-banner" data-testid="success-banner">
+    Welcome back! You are now logged in.
+    <button (click)="reset()" data-testid="reset-btn">Sign out</button>
+  </div>
+
+  <form
+    *ngIf="!submitted"
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    novalidate
+    data-testid="login-form"
+  >
+    <div class="field">
+      <label for="username">Username</label>
+      <input
+        id="username"
+        type="text"
+        formControlName="username"
+        placeholder="Your username"
+        data-testid="input-username"
+        autocomplete="username"
+      />
+      <span class="error" *ngIf="username.invalid && username.touched" data-testid="error-username">
+        <span *ngIf="username.errors?.['required']">Username is required.</span>
+        <span *ngIf="username.errors?.['minlength']">At least 3 characters.</span>
+      </span>
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <div class="input-wrapper">
+        <input
+          id="password"
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Your password"
+          data-testid="input-password"
+          autocomplete="current-password"
+        />
+        <button
+          type="button"
+          class="toggle-btn"
+          (click)="togglePassword()"
+          data-testid="toggle-password"
+        >
+          {{ showPassword ? 'Hide' : 'Show' }}
+        </button>
+      </div>
+      <span class="error" *ngIf="password.invalid && password.touched" data-testid="error-password">
+        <span *ngIf="password.errors?.['required']">Password is required.</span>
+        <span *ngIf="password.errors?.['minlength']">At least 6 characters.</span>
+      </span>
+    </div>
+
+    <div class="field field--checkbox">
+      <label>
+        <input type="checkbox" formControlName="rememberMe" data-testid="input-remember-me" />
+        Remember me
+      </label>
+    </div>
+
+    <button type="submit" data-testid="submit-btn">Sign In</button>
+  </form>
+</div>
