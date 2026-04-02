@@ -135,7 +135,8 @@ function buildTestBlocks(analysis) {
     patterns.includes("react-components") ||
     patterns.includes("angular-components")
   ) {
-    blocks.push(componentBlock(analysis));
+    const formInfo = detectFormInfo(analysis);
+    blocks.push(formInfo ? formBlock(formInfo) : componentBlock(analysis));
   }
 
   if (patterns.includes("api-routes")) {
@@ -157,7 +158,167 @@ function buildTestBlocks(analysis) {
   return blocks;
 }
 
+// ─── Form detection ──────────────────────────────────────────────────────────
+
+/**
+ * If any changed file looks like a reactive form component, return structured
+ * info about it so we can generate validation-aware tests.
+ */
+function detectFormInfo(analysis) {
+  const htmlFile = analysis.filesWithContext.find(
+    (f) =>
+      f.extension === ".html" &&
+      f.content &&
+      /formControlName|formGroup/.test(f.content),
+  );
+  if (!htmlFile) return null;
+
+  const tsFile = analysis.filesWithContext.find(
+    (f) => f.extension === ".ts" && f.content && /Validators/.test(f.content),
+  );
+
+  // Extract all data-testid values from the HTML
+  const testIds = [];
+  const testIdRegex = /data-testid=["']([^"']+)["']/g;
+  let m;
+  while ((m = testIdRegex.exec(htmlFile.content)) !== null) {
+    testIds.push(m[1]);
+  }
+
+  // Detect the page route from the file path (e.g. register-form -> /register)
+  const routeMatch = htmlFile.path.match(/components[\\/]([\w-]+)[\\/]/);
+  const route = routeMatch
+    ? `/${routeMatch[1].replace(/-form$|-page$/, "")}`
+    : "/";
+
+  // Collect input testIds and their types
+  const inputRegex =
+    /<input[^>]*data-testid=["']([^"']+)["'][^>]*type=["']([^"']+)["']|<input[^>]*type=["']([^"']+)["'][^>]*data-testid=["']([^"']+)["']/g;
+  const inputs = [];
+  while ((m = inputRegex.exec(htmlFile.content)) !== null) {
+    inputs.push({ testId: m[1] || m[4], type: m[2] || m[3] });
+  }
+  // Also pick up textareas
+  const taRegex = /<textarea[^>]*data-testid=["']([^"']+)["']/g;
+  while ((m = taRegex.exec(htmlFile.content)) !== null) {
+    inputs.push({ testId: m[1], type: "textarea" });
+  }
+
+  const submitId = testIds.find((id) => /submit/.test(id)) || null;
+  const formId =
+    testIds.find((id) => /form/.test(id) && !/error/.test(id)) || null;
+  const successId = testIds.find((id) => /success|banner/.test(id)) || null;
+  const errorIds = testIds.filter((id) => /error/.test(id));
+
+  // Extract required validator hints from TS source
+  const requiredFields = tsFile
+    ? [...tsFile.content.matchAll(/['"](\w+)['"].*?Validators\.required/g)].map(
+        (x) => x[1],
+      )
+    : [];
+
+  return {
+    route,
+    testIds,
+    inputs,
+    submitId,
+    formId,
+    successId,
+    errorIds,
+    requiredFields,
+  };
+}
+
 // ─── Individual template blocks ───────────────────────────────────────────────
+
+function formBlock(info) {
+  const {
+    route,
+    inputs,
+    submitId,
+    formId,
+    successId,
+    errorIds,
+    requiredFields,
+  } = info;
+
+  const fillInputs = inputs
+    .filter((i) => i.type !== "checkbox")
+    .map((i) => {
+      const val =
+        i.type === "email"
+          ? "test@example.com"
+          : i.type === "number"
+            ? "25"
+            : i.type === "password"
+              ? "SecurePass1"
+              : "Test Value";
+      return `    await page.getByTestId('${i.testId}').fill('${val}');`;
+    })
+    .join("\n");
+
+  const checkboxInputs = inputs
+    .filter((i) => i.type === "checkbox")
+    .map((i) => `    await page.getByTestId('${i.testId}').check();`)
+    .join("\n");
+
+  const submitLine = submitId
+    ? `await page.getByTestId('${submitId}').click();`
+    : `await page.getByRole('button', { name: /submit|register|send/i }).click();`;
+  const successLine = successId
+    ? `await expect(page.getByTestId('${successId}')).toBeVisible();`
+    : `await expect(page.getByRole('alert')).toBeVisible();`;
+  const formVisible = formId
+    ? `await expect(page.getByTestId('${formId}')).toBeVisible();`
+    : `await expect(page.getByRole('form')).toBeVisible();`;
+
+  const emptySubmitAsserts = errorIds.length
+    ? errorIds
+        .map(
+          (id) => `    await expect(page.getByTestId('${id}')).toBeVisible();`,
+        )
+        .join("\n")
+    : `    // TODO: assert validation error messages are shown`;
+
+  const requiredAsserts = requiredFields.length
+    ? requiredFields
+        .map((f) => {
+          const inputTestId =
+            inputs.find((i) => i.testId.includes(f))?.testId || `input-${f}`;
+          const errorTestId =
+            errorIds.find((id) => id.includes(f)) || `error-${f}`;
+          return `
+  test('shows error when ${f} is empty', async ({ page }) => {
+    await page.goto('${route}');
+    await page.getByTestId('${inputTestId}').focus();
+    await page.getByTestId('${inputTestId}').blur();
+    await expect(page.getByTestId('${errorTestId}')).toBeVisible();
+  });`;
+        })
+        .join("\n")
+    : "";
+
+  return `test.describe('Form — ${route}', () => {
+  test('renders the form', async ({ page }) => {
+    await page.goto('${route}');
+    ${formVisible}
+  });
+
+  test('shows validation errors when submitted empty', async ({ page }) => {
+    await page.goto('${route}');
+    ${submitLine}
+${emptySubmitAsserts}
+  });
+${requiredAsserts}
+  test('submits successfully with valid data', async ({ page }) => {
+    await page.goto('${route}');
+${fillInputs}
+${checkboxInputs}
+    ${submitLine}
+    ${successLine}
+  });
+});`;
+}
 
 function componentBlock(analysis) {
   const label = analysis.changedFiles.join(", ");
