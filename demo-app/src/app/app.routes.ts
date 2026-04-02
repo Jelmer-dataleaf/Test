@@ -4,8 +4,8 @@ import { TaskDetailComponent } from './components/task-detail/task-detail.compon
 import { TaskSearchComponent } from './components/task-search/task-search.component';
 
 export const routes: Routes = [
-  { path: '',          redirectTo: 'tasks', pathMatch: 'full' },
-  { path: 'tasks',     component: TaskListComponent },
+  { path: '', redirectTo: 'tasks', pathMatch: 'full' },
+  { path: 'tasks', component: TaskListComponent },
   { path: 'tasks/:id', component: TaskDetailComponent },
-  { path: 'search',    component: TaskSearchComponent },
+  { path: 'search', component: TaskSearchComponent },
 ];

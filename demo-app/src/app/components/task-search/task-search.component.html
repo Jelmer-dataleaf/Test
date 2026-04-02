@@ -23,8 +23,7 @@
         <span class="badge priority-{{ task.priority }}">{{ task.priority }}</span>
         {{ task.title }}
       </li>
-    }
-    @empty {
+    } @empty {
       <li data-testid="no-results">No tasks match your search.</li>
     }
   </ul>

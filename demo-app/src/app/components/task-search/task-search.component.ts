@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule }      from '@angular/common';
-import { FormsModule }       from '@angular/forms';
-import { Task }              from '../../models/task.model';
-import { TaskService }       from '../../services/task.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Task } from '../../models/task.model';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-task-search',
@@ -12,15 +12,15 @@ import { TaskService }       from '../../services/task.service';
   styleUrl: './task-search.component.scss',
 })
 export class TaskSearchComponent implements OnInit {
-  query       = '';
-  allTasks:      Task[] = [];
+  query = '';
+  allTasks: Task[] = [];
   filteredTasks: Task[] = [];
 
   constructor(private taskService: TaskService) {}
 
   ngOnInit(): void {
     this.taskService.getTasks().subscribe((tasks) => {
-      this.allTasks      = tasks;
+      this.allTasks = tasks;
       this.filteredTasks = tasks;
     });
   }
@@ -33,7 +33,7 @@ export class TaskSearchComponent implements OnInit {
   }
 
   clearSearch(): void {
-    this.query         = '';
+    this.query = '';
     this.filteredTasks = this.allTasks;
   }
 }

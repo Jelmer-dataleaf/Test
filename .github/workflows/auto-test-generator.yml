@@ -1,0 +1,62 @@
+name: Auto Playwright Test Generator
+
+on:
+  push:
+    branches:
+      - "**" # trigger on every branch push
+    paths-ignore: # skip if only generated tests or docs changed
+      - "tests/generated/**"
+      - "**.md"
+
+jobs:
+  generate-tests:
+    name: Generate Playwright tests from last commit
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # needed to commit the generated spec back to the branch
+
+    steps:
+      # ── 1. Checkout with full history so HEAD~1 is always available ──────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # HEAD + HEAD~1 is the minimum the generator needs
+
+      # ── 2. Set up Node ────────────────────────────────────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      # ── 3. Install generator dependencies ────────────────────────────────────
+      - name: Install dependencies
+        run: npm ci
+
+      # ── 4. Run the test generator ────────────────────────────────────────────
+      - name: Generate Playwright test
+        env:
+          # Optional: set OPENAI_API_KEY in repo secrets for AI-powered generation
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4o' }}
+          BASE_URL: ${{ vars.BASE_URL || 'http://localhost:4200' }}
+        run: node src/index.js
+
+      # ── 5. Commit the generated spec back to the branch ──────────────────────
+      - name: Commit generated test (if any)
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Only stage files inside tests/generated/
+          git add tests/generated/
+
+          # Commit only when there is something new to commit
+          if git diff --cached --quiet; then
+            echo "No new test file generated — nothing to commit."
+          else
+            COMMIT_SHA=$(git log -1 --format=%h HEAD~1..HEAD 2>/dev/null || git log -1 --format=%h)
+            git commit -m "test(auto): generated Playwright spec for ${COMMIT_SHA} [skip ci]"
+            git push
+          fi
