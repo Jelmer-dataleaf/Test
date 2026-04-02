@@ -9,6 +9,7 @@ import { FeedbackFormComponent } from './components/feedback-form/feedback-form.
 import { NewsletterFormComponent } from './components/newsletter-form/newsletter-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ProfileFormComponent } from './components/profile-form/profile-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -22,4 +23,5 @@ export const routes: Routes = [
   { path: 'feedback', component: FeedbackFormComponent },
   { path: 'newsletter', component: NewsletterFormComponent },
   { path: 'login', component: LoginFormComponent },
+  { path: 'profile', component: ProfileFormComponent },
 ];
