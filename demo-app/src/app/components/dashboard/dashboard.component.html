@@ -1,0 +1,24 @@
+<div class="dashboard" data-testid="dashboard-page">
+  <h2>Dashboard</h2>
+  <p class="subtitle">Welcome back. Here's what's going on.</p>
+
+  <div class="stats-grid" data-testid="stats-grid">
+    @for (card of stats; track card.testId) {
+      <a class="stat-card" [routerLink]="card.route" [attr.data-testid]="card.testId">
+        <span class="stat-value">{{ card.value }}</span>
+        <span class="stat-unit">{{ card.unit }}</span>
+        <span class="stat-label">{{ card.label }}</span>
+      </a>
+    }
+  </div>
+
+  <section class="quick-links" data-testid="quick-links">
+    <h3>Quick actions</h3>
+    <div class="links-row">
+      <a routerLink="/contact" class="link-btn" data-testid="link-contact">+ New message</a>
+      <a routerLink="/feedback" class="link-btn" data-testid="link-feedback">+ Give feedback</a>
+      <a routerLink="/newsletter" class="link-btn" data-testid="link-newsletter">+ Subscribe</a>
+      <a routerLink="/register" class="link-btn" data-testid="link-register">+ Register</a>
+    </div>
+  </section>
+</div>

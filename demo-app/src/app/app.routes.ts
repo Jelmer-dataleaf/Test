@@ -8,9 +8,11 @@ import { RegisterFormComponent } from './components/register-form/register-form.
 import { FeedbackFormComponent } from './components/feedback-form/feedback-form.component';
 import { NewsletterFormComponent } from './components/newsletter-form/newsletter-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'tasks', pathMatch: 'full' },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'tasks', component: TaskListComponent },
   { path: 'tasks/:id', component: TaskDetailComponent },
   { path: 'search', component: TaskSearchComponent },
