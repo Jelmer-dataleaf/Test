@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -11,13 +11,15 @@ import { CommonModule } from '@angular/common';
 export class ContactFormComponent {
   submitted = false;
 
+  private fb = inject(FormBuilder);
+
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
     message: ['', [Validators.required, Validators.minLength(10)]],
   });
 
-  constructor(private fb: FormBuilder) {}
+  constructor() {}
 
   get name() {
     return this.form.get('name')!;

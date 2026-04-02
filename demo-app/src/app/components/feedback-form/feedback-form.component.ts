@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -13,6 +13,8 @@ export class FeedbackFormComponent {
 
   categories = ['Bug Report', 'Feature Request', 'General Feedback', 'Other'];
 
+  private fb = inject(FormBuilder);
+
   form = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
@@ -22,7 +24,7 @@ export class FeedbackFormComponent {
     feedback: ['', [Validators.required, Validators.minLength(20), Validators.maxLength(500)]],
   });
 
-  constructor(private fb: FormBuilder) {}
+  constructor() {}
 
   get fullName() {
     return this.form.get('fullName')!;

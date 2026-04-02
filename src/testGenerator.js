@@ -375,7 +375,7 @@ function pageRouteBlock(analysis) {
   return `test.describe('Page route — ${route}', () => {
   test('loads the page', async ({ page }) => {
     await page.goto('${route}');
-    await expect(page).toHaveURL(/${route.replace("/", "")}/);
+    await expect(page).toHaveURL(new RegExp(${JSON.stringify(route.replace(/^\//, ""))}));
   });
 
   test('displays expected heading', async ({ page }) => {

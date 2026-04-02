@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormBuilder,
@@ -23,6 +23,8 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
 export class RegisterFormComponent {
   submitted = false;
 
+  private fb = inject(FormBuilder);
+
   form = this.fb.group(
     {
       username: [
@@ -43,7 +45,7 @@ export class RegisterFormComponent {
     { validators: passwordsMatch },
   );
 
-  constructor(private fb: FormBuilder) {}
+  constructor() {}
 
   get username() {
     return this.form.get('username')!;
