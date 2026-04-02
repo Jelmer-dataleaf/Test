@@ -6,6 +6,7 @@ import { ContactFormComponent } from './components/contact-form/contact-form.com
 import { MemePageComponent } from './components/meme-page/meme-page.component';
 import { RegisterFormComponent } from './components/register-form/register-form.component';
 import { FeedbackFormComponent } from './components/feedback-form/feedback-form.component';
+import { NewsletterFormComponent } from './components/newsletter-form/newsletter-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'tasks', pathMatch: 'full' },
@@ -16,4 +17,5 @@ export const routes: Routes = [
   { path: 'meme', component: MemePageComponent },
   { path: 'register', component: RegisterFormComponent },
   { path: 'feedback', component: FeedbackFormComponent },
+  { path: 'newsletter', component: NewsletterFormComponent },
 ];
