@@ -4,6 +4,7 @@ import { TaskDetailComponent } from './components/task-detail/task-detail.compon
 import { TaskSearchComponent } from './components/task-search/task-search.component';
 import { ContactFormComponent } from './components/contact-form/contact-form.component';
 import { MemePageComponent } from './components/meme-page/meme-page.component';
+import { RegisterFormComponent } from './components/register-form/register-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'tasks', pathMatch: 'full' },
@@ -12,4 +13,5 @@ export const routes: Routes = [
   { path: 'search', component: TaskSearchComponent },
   { path: 'contact', component: ContactFormComponent },
   { path: 'meme', component: MemePageComponent },
+  { path: 'register', component: RegisterFormComponent },
 ];
